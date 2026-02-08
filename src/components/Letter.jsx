@@ -47,19 +47,6 @@ import { useEffect, useState } from "react";
 import RevealSentence from "./RevealSentence";
 
 export default function Letter({ onNext }) {
-  const [showHint, setShowHint] = useState(
-    !localStorage.getItem("scrollHintSeen")
-  );
-
-  useEffect(() => {
-    const hide = () => {
-      setShowHint(false);
-      localStorage.setItem("scrollHintSeen", "true");
-      window.removeEventListener("scroll", hide);
-    };
-    window.addEventListener("scroll", hide);
-    return () => window.removeEventListener("scroll", hide);
-  }, []);
 
   return (
     <div className="screen center">
@@ -71,7 +58,7 @@ export default function Letter({ onNext }) {
   Happy Anniversary ❤️
 </h1>
 
-          {/* {showHint && <div className="scroll-hint">⬇️ Scroll</div>} */}
+
 
           <RevealSentence>
             From the moment you entered my life, everything found its place.
