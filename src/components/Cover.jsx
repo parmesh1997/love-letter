@@ -1,61 +1,3 @@
-// import { useEffect, useRef, useState } from "react";
-
-// export default function Cover({ onOpen }) {
-//   const heartRef = useRef(null);
-//   const [explode, setExplode] = useState(false);
-
-//   useEffect(() => {
-//     let raf;
-
-//     const animate = () => {
-//       const analyser = window.__ambientAnalyser;
-
-//       if (analyser && heartRef.current) {
-//         const data = new Uint8Array(
-//           analyser.frequencyBinCount
-//         );
-//         analyser.getByteFrequencyData(data);
-
-//         // average low frequencies (bass / rhythm)
-//         const bass =
-//           data.slice(0, 10).reduce((a, b) => a + b, 0) /
-//           10;
-
-//         // map bass to subtle scale
-//         const scale =
-//           1 + Math.min(bass / 500, 0.06);
-
-//         heartRef.current.style.transform = `scale(${scale})`;
-//       }
-
-//       raf = requestAnimationFrame(animate);
-//     };
-
-//     animate();
-//     return () => cancelAnimationFrame(raf);
-//   }, []);
-
-//   const handleClick = () => {
-//     setExplode(true);
-//     setTimeout(onOpen, 900);
-//   };
-
-//   return (
-//     <div className="screen center">
-//       <div
-//         ref={heartRef}
-//         className={`heart glow-heart ${
-//           explode ? "explode" : ""
-//         }`}
-//         onClick={handleClick}
-//       >
-//         ❤️
-//       </div>
-
-//       <p className="glow-hint">Tap my heart</p>
-//     </div>
-//   );
-// }
 import { useEffect, useRef, useState } from "react";
 
 export default function Cover({ onOpen }) {
@@ -73,8 +15,7 @@ export default function Cover({ onOpen }) {
         analyser.getByteFrequencyData(data);
 
         // Low-frequency average (beat)
-        const bass =
-          data.slice(0, 10).reduce((a, b) => a + b, 0) / 10;
+        const bass = data.slice(0, 10).reduce((a, b) => a + b, 0) / 10;
 
         // Subtle scale pulse
         const scale = 1 + Math.min(bass / 500, 0.06);
