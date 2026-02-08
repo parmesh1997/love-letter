@@ -1,0 +1,516 @@
+html, body {
+  margin: 0;
+  font-family: "Lato", system-ui, sans-serif;
+  background: #fff5f7;
+  color: #2b2b2b;
+}
+
+.app, .screen {
+  height: 100vh;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.paper-bg {
+  background-image:
+    linear-gradient(rgba(0,0,0,0.02) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,0,0,0.02) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Heart transition */
+.heart {
+  font-size: 4rem;
+  cursor: pointer;
+  transition: transform 0.9s ease, opacity 0.9s ease;
+}
+/* .heart.explode {
+  transform: scale(15);
+  opacity: 0;
+} */
+
+/* Fade transition */
+.fade-enter { opacity: 0; }
+.fade-enter-active { opacity: 1; transition: opacity 600ms; }
+.fade-exit-active { opacity: 0; transition: opacity 600ms; }
+
+/* Letter */
+.letter-wrapper {
+  position: relative;
+  width: 90%;
+  max-width: 520px;
+}
+
+.letter-bg {
+  position: absolute;
+  inset: 0;
+  background: url("../public/background.png") center/cover;
+  filter: blur(14px) grayscale(30%);
+  opacity: 0.18;
+  border-radius: 12px;
+}
+
+.letter {
+  position: relative;
+  background: rgba(255,255,255,0.85);
+  padding: 40px;
+  border-radius: 12px;
+  z-index: 1;
+}
+
+.blur-container {
+  animation: blurFade 1.2s ease forwards;
+}
+
+@keyframes blurFade {
+  from { filter: blur(4px); }
+  to { filter: blur(0); }
+}
+
+/* Heading */
+.heading-animate {
+  animation: letterOpen 1s ease forwards;
+}
+@keyframes letterOpen {
+  from { letter-spacing: -1px; opacity: 0; }
+  to { letter-spacing: 0.6px; opacity: 1; }
+}
+
+/* Sentences */
+.sentence {
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.6s ease, transform 0.6s ease;
+  margin-top: 14px;
+}
+.sentence.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+.highlight {
+  font-weight: 700;
+}
+
+/* Buttons */
+button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+.primary { background: #ff4d6d; color: white; }
+.yes { background: #4caf50; color: white; }
+.yes:hover, .yes:active { animation: vibrate 0.25s; }
+@keyframes vibrate {
+  25% { transform: translateX(-1px); }
+  50% { transform: translateX(1px); }
+}
+
+/* Question */
+.question-box {
+  position: relative;
+  background: white;
+  padding: 40px;
+  border-radius: 12px;
+  height: 300px;
+}
+.no {
+  position: absolute;
+  background: #ccc;
+  transition: all 0.3s ease;
+}
+
+/* Sparkles */
+.sparkle {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  background: pink;
+  transform: rotate(45deg);
+  pointer-events: none;
+  animation: sparkle 700ms forwards;
+}
+.sparkle::before, .sparkle::after {
+  content: "";
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: pink;
+  border-radius: 50%;
+}
+.sparkle::before { top: -6px; }
+.sparkle::after { left: -6px; }
+@keyframes sparkle {
+  to { opacity: 0; transform: scale(2.5) rotate(45deg); }
+}
+
+/* Scroll hint */
+.scroll-hint {
+  margin-top: 10px;
+  opacity: 0.7;
+  animation: pulse 1.8s infinite;
+}
+@keyframes pulse {
+  50% { transform: translateY(6px); opacity: 1; }
+}
+/* Celebration background image */
+.celebration-bg {
+  position: relative;
+  background-image: url("../public/background.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.celebration-overlay {
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: blur(10px) grayscale(20%);
+}
+
+
+/* Ensure content stays above overlay */
+.celebration h1,
+.celebration p,
+.celebration button {
+  position: relative;
+  z-index: 1;
+}
+/* Celebration background image – refined */
+.celebration-bg {
+  position: relative;
+  background-image: url("../public/background.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+/* Softer, clearer overlay */
+.celebration-overlay {
+  position: absolute;
+  inset: 0;
+
+  /* ↓ LESS white, more image */
+  background: rgba(255, 255, 255, 0.55);
+
+  /* ↓ lighter blur, keep warmth */
+  backdrop-filter: blur(6px) saturate(1.05);
+
+  z-index: 0;
+}
+.celebration h1 {
+  font-weight: 800;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.celebration p {
+  text-shadow: 0 1px 4px rgba(0,0,0,0.12);
+}
+@media (max-width: 600px) {
+  .celebration-overlay {
+    background: rgba(255, 255, 255, 0.48);
+    backdrop-filter: blur(5px) saturate(1.08);
+  }
+}
+
+
+
+/* Celebration background cinematic reveal */
+.celebration-bg {
+  position: relative;
+  overflow: hidden;
+}
+
+.celebration-bg::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  background-image: url("../public/background.png");
+  background-size: cover;
+  background-position: center;
+
+  /* Initial state: clear + zoomed */
+  transform: scale(1.15);
+  filter: blur(0px);
+  opacity: 1;
+
+  transition: none;
+  z-index: 0;
+}
+
+/* Animate on mount */
+.celebrate-in::before {
+  animation: bgReveal 3.5s ease forwards;
+}
+
+@keyframes bgReveal {
+  0% {
+    transform: scale(1.15);
+    filter: blur(0px);
+  }
+  60% {
+    transform: scale(1);
+    filter: blur(0px);
+  }
+  100% {
+    transform: scale(1);
+    filter: blur(6px);
+  }
+}
+
+/* Soft overlay fades in AFTER image settles */
+.celebration-overlay {
+  position: absolute;
+  inset: 0;
+
+  background: rgba(255, 255, 255, 0.48);
+  backdrop-filter: blur(0px) saturate(1.05);
+
+  opacity: 0;
+  animation: overlayFade 2s ease forwards;
+  animation-delay: 1.8s;
+
+  z-index: 1;
+}
+
+@keyframes overlayFade {
+  to {
+    opacity: 1;
+    backdrop-filter: blur(5px) saturate(1.08);
+  }
+}
+
+/* Keep content above everything */
+.celebration h1,
+.celebration p,
+.celebration button {
+  position: relative;
+  z-index: 2;
+  text-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+@media (max-width: 600px) {
+  .celebrate-in::before {
+    animation-duration: 3s;
+  }
+
+  .celebration-overlay {
+    background: rgba(255, 255, 255, 0.45);
+  }
+}
+/* Glowy celebration text */
+.glow-title {
+  font-weight: 900;
+  color: #b83d53;
+  text-align: center;
+
+  text-shadow:
+    0 0 6px rgba(255, 77, 109, 0.6),
+    0 0 14px rgba(255, 77, 109, 0.5),
+    0 0 24px rgba(255, 77, 109, 0.35);
+}
+
+.glow-subtitle {
+  margin-top: 8px;
+  font-weight: 600;
+  color: #7209b7;
+
+  text-shadow:
+    0 0 4px rgba(114, 9, 183, 0.5),
+    0 0 10px rgba(114, 9, 183, 0.35);
+}
+.glow-title {
+  animation: glowPulse 3s ease-in-out infinite;
+}
+
+@keyframes glowPulse {
+  0% {
+    text-shadow:
+      0 0 6px rgba(255, 77, 109, 0.5),
+      0 0 14px rgba(255, 77, 109, 0.4);
+  }
+  50% {
+    text-shadow:
+      0 0 10px rgba(255, 77, 109, 0.75),
+      0 0 26px rgba(255, 77, 109, 0.55);
+  }
+  100% {
+    text-shadow:
+      0 0 6px rgba(255, 77, 109, 0.5),
+      0 0 14px rgba(255, 77, 109, 0.4);
+  }
+}
+@media (max-width: 600px) {
+  .glow-title {
+    text-shadow:
+      0 0 4px rgba(255, 77, 109, 0.45),
+      0 0 12px rgba(255, 77, 109, 0.3);
+  }
+}
+/* Glowing heart */
+.glow-heart {
+  font-size: 4rem;
+  cursor: pointer;
+
+  text-shadow:
+    0 0 6px rgba(255, 77, 109, 0.6),
+    0 0 16px rgba(255, 77, 109, 0.45),
+    0 0 30px rgba(255, 77, 109, 0.35);
+
+  animation: heartPulse 2.8s ease-in-out infinite;
+}
+
+/* Gentle breathing pulse */
+@keyframes heartPulse {
+  0% {
+    transform: scale(1);
+    text-shadow:
+      0 0 6px rgba(255, 77, 109, 0.5),
+      0 0 16px rgba(255, 77, 109, 0.4);
+  }
+  50% {
+    transform: scale(1.06);
+    text-shadow:
+      0 0 10px rgba(255, 77, 109, 0.75),
+      0 0 28px rgba(255, 77, 109, 0.55);
+  }
+  100% {
+    transform: scale(1);
+    text-shadow:
+      0 0 6px rgba(255, 77, 109, 0.5),
+      0 0 16px rgba(255, 77, 109, 0.4);
+  }
+}
+.glow-hint {
+  margin-top: 8px;
+  font-size: 0.95rem;
+  opacity: 0.85;
+  color: #7209b7;
+
+  text-shadow:
+    0 0 4px rgba(114, 9, 183, 0.4),
+    0 0 10px rgba(114, 9, 183, 0.25);
+}
+@media (max-width: 600px) {
+  .glow-heart {
+    text-shadow:
+      0 0 4px rgba(255, 77, 109, 0.45),
+      0 0 12px rgba(255, 77, 109, 0.3);
+  }
+}
+/* .heart.explode {
+  transform: scale(15);
+  opacity: 0;
+} */
+/* Wrapper controls explosion */
+.heart-wrapper {
+  transition: transform 0.9s ease, opacity 0.9s ease;
+  cursor: pointer;
+}
+
+/* Explosion now works */
+.heart-wrapper.explode {
+  transform: scale(15);
+  opacity: 0;
+}
+
+/* Inner heart = pulse only */
+.heart {
+  display: inline-block;
+}
+/* ===== Letter Glows ===== */
+
+/* Title glow */
+.glow-letter-title {
+  color: #ff4d6d;
+  text-align: center;
+
+  text-shadow:
+    0 0 6px rgba(255, 77, 109, 0.5),
+    0 0 14px rgba(255, 77, 109, 0.35),
+    0 0 22px rgba(255, 77, 109, 0.25);
+}
+
+/* Highlighted sentence glow */
+.sentence.show.highlight {
+  font-weight: 700;
+  color: #7209b7;
+
+  text-shadow:
+    0 0 4px rgba(114, 9, 183, 0.45),
+    0 0 10px rgba(114, 9, 183, 0.3);
+}
+
+/* Normal sentence – very subtle clarity glow */
+.sentence.show:not(.highlight) {
+  color: #2b2b2b;
+
+  text-shadow:
+    0 0 2px rgba(0, 0, 0, 0.08);
+}
+@media (max-width: 600px) {
+  .glow-letter-title {
+    text-shadow:
+      0 0 4px rgba(255, 77, 109, 0.4),
+      0 0 10px rgba(255, 77, 109, 0.25);
+  }
+
+  .sentence.show.highlight {
+    text-shadow:
+      0 0 3px rgba(114, 9, 183, 0.35),
+      0 0 8px rgba(114, 9, 183, 0.2);
+  }
+}
+/* ===== Question Screen Glows ===== */
+
+/* Question container – subtle lift */
+.glow-question-box {
+  box-shadow:
+    0 12px 30px rgba(0, 0, 0, 0.12),
+    0 0 20px rgba(255, 77, 109, 0.15);
+}
+
+/* Question text glow */
+.glow-question-text {
+  font-weight: 700;
+  color: #ff4d6d;
+  text-align: center;
+
+  text-shadow:
+    0 0 5px rgba(255, 77, 109, 0.5),
+    0 0 14px rgba(255, 77, 109, 0.35);
+}
+
+/* YES button – inviting glow */
+.glow-yes {
+  background: #4caf50;
+  color: white;
+
+  box-shadow:
+    0 0 6px rgba(76, 175, 80, 0.6),
+    0 0 18px rgba(76, 175, 80, 0.4),
+    0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Extra pulse on hover / tap */
+.glow-yes:hover,
+.glow-yes:active {
+  box-shadow:
+    0 0 10px rgba(76, 175, 80, 0.8),
+    0 0 28px rgba(76, 175, 80, 0.6),
+    0 10px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* NO button – playful, lighter glow */
+.glow-no {
+  background: #ccc;
+
+  box-shadow:
+    0 0 4px rgba(180, 180, 180, 0.6),
+    0 0 10px rgba(180, 180, 180, 0.4);
+}
