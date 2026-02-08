@@ -32,54 +32,83 @@ function App() {
 
   const startExperience = async () => {
     /* -----------------------------
-       AUDIO CONTEXT (MOBILE SAFE)
-    ------------------------------ */
-    if (!audioCtxRef.current) {
-      audioCtxRef.current = new (window.AudioContext ||
-        window.webkitAudioContext)();
+     AUDIO CONTEXT (SAFE INIT)
+  ------------------------------ */
+    try {
+      if (!audioCtxRef.current) {
+        audioCtxRef.current = new (
+          window.AudioContext || window.webkitAudioContext
+        )();
 
-      analyserRef.current = audioCtxRef.current.createAnalyser();
-      analyserRef.current.fftSize = 256;
+        analyserRef.current = audioCtxRef.current.createAnalyser();
+        analyserRef.current.fftSize = 256;
 
-      const source =
-        audioCtxRef.current.createMediaElementSource(
-          ambientRef.current
+        const source = audioCtxRef.current.createMediaElementSource(
+          ambientRef.current,
         );
 
-      source.connect(analyserRef.current);
-      analyserRef.current.connect(
-        audioCtxRef.current.destination
-      );
+        source.connect(analyserRef.current);
+        analyserRef.current.connect(audioCtxRef.current.destination);
 
-      window.__ambientAnalyser = analyserRef.current;
-    }
+        window.__ambientAnalyser = analyserRef.current;
+      }
 
-    if (audioCtxRef.current.state === "suspended") {
-      await audioCtxRef.current.resume();
+      if (audioCtxRef.current.state === "suspended") {
+        await audioCtxRef.current.resume();
+      }
+
+      /* -----------------------------
+       TRY PLAY AMBIENT (NON-BLOCKING)
+    ------------------------------ */
+      const ambient = ambientRef.current;
+      ambient.volume = 0;
+
+      ambient
+        .play()
+        .then(() => {
+          let av = 0;
+          const fade = setInterval(() => {
+            av += 0.02;
+            ambient.volume = av;
+            if (av >= 0.35) clearInterval(fade);
+          }, 120);
+        })
+        .catch(() => {
+          // Ignore audio failure
+          console.warn("Ambient autoplay blocked");
+        });
+
+      /* -----------------------------
+       TRY PLAY LOVE MUSIC (DELAYED)
+    ------------------------------ */
+      setTimeout(() => {
+        const music = musicRef.current;
+        music.volume = 0;
+
+        music
+          .play()
+          .then(() => {
+            let mv = 0;
+            const fade = setInterval(() => {
+              mv += 0.03;
+              music.volume = mv;
+              if (mv >= 0.6) clearInterval(fade);
+            }, 120);
+          })
+          .catch(() => {
+            console.warn("Music autoplay blocked");
+          });
+
+        // Ambient steps back if it exists
+        if (ambient) ambient.volume = 0.05;
+      }, 2200);
+    } catch (e) {
+      console.warn("Audio init failed", e);
     }
 
     /* -----------------------------
-       AMBIENT: START & FADE IN
-    ------------------------------ */
-    const ambient = ambientRef.current;
-    ambient.volume = 0;
-    await ambient.play();
-    fadeVolume(ambient, 0.35);
-
-    /* -----------------------------
-       LOVE MUSIC: DELAYED START
-       + AMBIENT FADE DOWN
-    ------------------------------ */
-    setTimeout(async () => {
-      const music = musicRef.current;
-      music.volume = 0;
-      await music.play();
-      fadeVolume(music, 0.6);
-
-      // IMPORTANT: ambient steps back
-      fadeVolume(ambient, 0.05);
-    }, 2200);
-
+     ALWAYS CONTINUE EXPERIENCE
+  ------------------------------ */
     setStep("letter");
   };
 
@@ -98,10 +127,8 @@ function App() {
   }, [step]);
 
   const renderStep = () => {
-    if (step === "cover")
-      return <Cover onOpen={startExperience} />;
-    if (step === "letter")
-      return <Letter onNext={() => setStep("question")} />;
+    if (step === "cover") return <Cover onOpen={startExperience} />;
+    if (step === "letter") return <Letter onNext={() => setStep("question")} />;
     if (step === "question")
       return <Question onYes={() => setStep("celebration")} />;
     return <Celebration onReplay={() => setStep("cover")} />;
